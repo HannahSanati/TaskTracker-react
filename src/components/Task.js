@@ -13,7 +13,9 @@ const Task = ({ task, onDelete, onToggle, handleEdit, Reminder }) => {
         <h5>
           {task.text} <FaBell onClick={() => Reminder(task.id)} />
           <FaEdit
-            onClick={() => handleEdit(task.id)}
+             onClick={() => {
+             handleEdit(task.id);
+            }}
             style={{
               color: "mediumseagreen",
               cursor: "pointer",

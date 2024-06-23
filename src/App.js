@@ -13,24 +13,39 @@ const App = () => {
   // Add Task
   const addTask = (task) => {
     const id = Math.floor(Math.random() * 10000) + 1;
-    const newTask = { id, ...task };
+    const newTask = { id, ...task, isDone: false };
     setTasks([...tasks, newTask]);
   };
 
   // Edit Task
   const editTask = (id, updatedTask) => {
-    setTasks(
-      tasks.map((task) => (task.id === id ? { ...task, ...updatedTask } : task))
-    );
+    console.log(`Editing task with id: ${id}`);
+    setTasks(tasks.map((task) => 
+      task.id === id ? { ...task, ...updatedTask } : task
+    ));
+  };
+
+  const handleEdit = (id) => {
+    const updatedText = prompt("Enter new task text");
+    const updatedDay = prompt("Enter new task day");
+    if (updatedText && updatedDay) {
+      const updatedTask = {
+        text: updatedText,
+        day: updatedDay
+      };
+      editTask(id, updatedTask);
+    }
   };
 
   // Delete Task
   const deleteTask = (id) => {
+    console.log(`Deleting task with id: ${id}`);
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
   // Toggle isDone
   const toggleisDone = (id) => {
+    console.log(`Toggling isDone for task with id: ${id}`);
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, isDone: !task.isDone } : task
@@ -40,6 +55,7 @@ const App = () => {
 
   // Reminder
   const Reminder = (id) => {
+    console.log(`Toggling reminder for task with id: ${id}`);
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, reminder: !task.reminder } : task
@@ -57,13 +73,24 @@ const App = () => {
       {showInfo && <Info showInfo={Info} />}
       {showAddTask && <AddTask onAdd={addTask} />}
       {tasks.length > 0 ? (
-        <Tasks
-          tasks={tasks}
-          onDelete={deleteTask}
-          onToggle={toggleisDone}
-          onEdit={editTask}
-          onReminder={Reminder}
-        />
+        <>
+          <h3>Active Tasks</h3>
+          <Tasks
+            tasks={tasks.filter(task => !task.isDone)}
+            onDelete={deleteTask}
+            onToggle={toggleisDone}
+            onEdit={handleEdit}
+            onReminder={Reminder}
+          />
+          <h3>Completed Tasks</h3>
+          <Tasks
+            tasks={tasks.filter(task => task.isDone)}
+            onDelete={deleteTask}
+            onToggle={toggleisDone}
+            onEdit={handleEdit}
+            onReminder={Reminder}
+          />
+        </>
       ) : (
         "No Tasks To Show"
       )}
