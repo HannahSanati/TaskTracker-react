@@ -69,7 +69,7 @@ const App = () => {
           onAdd={() => setShowAddTask(!showAddTask)}
           showAdd={showAddTask}
         />
-        {showInfo && <Info showInfo={Info} />}
+        {/* {showInfo && <Info showInfo={Info} />} */}
         {/* && it means if its true then */}
         {showAddTask && <AddTask onAdd={addTask} />}
         {tasks.length > 0 ? (

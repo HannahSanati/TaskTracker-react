@@ -94,6 +94,7 @@ body {
 
 .form-control {
   margin: 20px 0;
+  border-radius: 10px;
 }
 
 .form-control label {

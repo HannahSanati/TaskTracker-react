@@ -12,16 +12,20 @@ const Task = ({ task, onDelete, onToggle, onEdit, Reminder }) => {
     //   ${} a condition
     //   onDoubleClick={() => onToggle(task.id)}
     // >
+    
+    <div 
+    className={`task ${task.reminder ? "reminder" : ""}`}
+    >
+
     <div
       onDoubleClick={() => onToggle(task.id)}
       className={`task ${task.isDone ? "done" : ""}`}
       // style={{ borderLeft: task.done ? "4px solid green" : "none" }}
     >
-      <h5>
+      <h5 >
         {task.text}{" "}
         <FaBell
           onClick={() => Reminder(task.id)}
-          className={`task ${task.reminder ? "reminder" : ""}`}
         />
         <FaEdit
           onClick={() => onEdit(task.id)}
@@ -40,6 +44,8 @@ const Task = ({ task, onDelete, onToggle, onEdit, Reminder }) => {
       </h5>
       <p>{task.day}</p>
     </div>
+    </div>
+
   );
 };
 
