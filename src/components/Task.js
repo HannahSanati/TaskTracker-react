@@ -3,7 +3,7 @@ import { FaEdit } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import { FaBell } from "react-icons/fa";
 
-const Task = ({ task, onDelete, onToggle, onEdit, Reminder }) => {
+const Task = ({ task, onDelete, onToggle, handleEdit, Reminder }) => {
   return (
     <div className={`task ${task.reminder ? "reminder" : ""}`}>
       <div
@@ -13,7 +13,7 @@ const Task = ({ task, onDelete, onToggle, onEdit, Reminder }) => {
         <h5>
           {task.text} <FaBell onClick={() => Reminder(task.id)} />
           <FaEdit
-            onClick={() => onEdit(task.id)}
+            onClick={() => handleEdit(task.id)}
             style={{
               color: "mediumseagreen",
               cursor: "pointer",
