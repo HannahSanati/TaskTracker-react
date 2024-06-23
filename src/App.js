@@ -3,9 +3,20 @@ import "./App.css";
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
-import Info from "./components/Info";
+import { Provider } from "react-redux";
+import store from "./store";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { useSelector } from "react-redux";
+import SignInForm from "./components/SignInForm";
 
 const App = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const [showAddTask, setShowAddTask] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [showInfo, setShowInfo] = useState(false);
@@ -20,9 +31,9 @@ const App = () => {
   // Edit Task
   const editTask = (id, updatedTask) => {
     console.log(`Editing task with id: ${id}`);
-    setTasks(tasks.map((task) => 
-      task.id === id ? { ...task, ...updatedTask } : task
-    ));
+    setTasks(
+      tasks.map((task) => (task.id === id ? { ...task, ...updatedTask } : task))
+    );
   };
 
   const handleEdit = (id) => {
@@ -31,7 +42,7 @@ const App = () => {
     if (updatedText && updatedDay) {
       const updatedTask = {
         text: updatedText,
-        day: updatedDay
+        day: updatedDay,
       };
       editTask(id, updatedTask);
     }
@@ -64,37 +75,51 @@ const App = () => {
   };
 
   return (
-    <div className="container">
-      <Header
-        showInfo={() => setShowInfo(!showInfo)}
-        onAdd={() => setShowAddTask(!showAddTask)}
-        showAdd={showAddTask}
-      />
-      {showInfo && <Info showInfo={Info} />}
-      {showAddTask && <AddTask onAdd={addTask} />}
-      {tasks.length > 0 ? (
-        <>
-          <h3>Active Tasks</h3>
-          <Tasks
-            tasks={tasks.filter(task => !task.isDone)}
-            onDelete={deleteTask}
-            onToggle={toggleisDone}
-            onEdit={handleEdit}
-            onReminder={Reminder}
+    <Provider store={store}>
+      <Router>
+        <div className="container">
+          <Header
+            showInfo={() => setShowInfo(!showInfo)}
+            onAdd={() => setShowAddTask(!showAddTask)}
+            showAdd={showAddTask}
           />
-          <h3>Completed Tasks</h3>
-          <Tasks
-            tasks={tasks.filter(task => task.isDone)}
-            onDelete={deleteTask}
-            onToggle={toggleisDone}
-            onEdit={handleEdit}
-            onReminder={Reminder}
-          />
-        </>
-      ) : (
-        "No Tasks To Show"
-      )}
-    </div>
+          {showAddTask && <AddTask onAdd={addTask} />}
+          <Routes>
+            <Route
+              path="/"
+              element={isAuthenticated ? <Navigate to="/tasks" /> : <SignInForm />}
+            />
+            <Route
+              path="/tasks"
+              element={
+                isAuthenticated ? (
+                  <>
+                    <h3>Active Tasks:</h3>
+                    <Tasks
+                      tasks={tasks.filter(task => !task.isDone)}
+                      onDelete={deleteTask}
+                      onToggle={toggleisDone}
+                      onEdit={handleEdit}
+                      onReminder={Reminder}
+                    />
+                    <h3>Completed Tasks:</h3>
+                    <Tasks
+                      tasks={tasks.filter(task => task.isDone)}
+                      onDelete={deleteTask}
+                      onToggle={toggleisDone}
+                      onEdit={handleEdit}
+                      onReminder={Reminder}
+                    />
+                  </>
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+          </Routes>
+        </div>
+      </Router>
+    </Provider>
   );
 };
 
