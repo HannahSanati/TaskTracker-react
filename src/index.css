@@ -13,6 +13,11 @@ body {
   background-image:url("https://img.freepik.com/free-vector/gradient-connection-background_23-2150410836.jpg?size=626&ext=jpg&ga=GA1.1.87170709.1707350400&semt=ais");
   background-repeat: no-repeat;
   background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 
 .container {
@@ -35,7 +40,7 @@ body {
 
 .btn {
   display: inline-block;
-  background: #000;
+  background: mediumslateblue;
   color: #fff;
   border: none;
   padding: 10px 20px;
